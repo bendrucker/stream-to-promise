@@ -1,4 +1,4 @@
-stream-to-promise
+stream-to-promise [![Build Status](https://travis-ci.org/valet-io/stream-to-promise.png)](https://travis-ci.org/valet-io/stream-to-promise)
 =================
 
 Convert readable streams to promises.
