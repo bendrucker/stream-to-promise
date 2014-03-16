@@ -51,7 +51,7 @@ describe('stream-to-promise', function () {
 
 
   it('rejects on stream errors', function (done) {
-    var err = new TypeError();
+    var err = new Error();
     stream.emit('error', err);
     promise.catch(function (error) {
       expect(error).to.equal(err);
