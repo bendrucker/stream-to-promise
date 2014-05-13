@@ -1,15 +1,18 @@
+'use strict';
+
 var Stream          = require('stream');
 var chai            = require('chai');
 var Promise         = require('bluebird');
 var streamToPromise = require('./');
 
-require('mocha-as-promised')();
 chai.use(require('chai-as-promised'));
 Promise.onPossiblyUnhandledRejection(function (err) {
   throw err;
 });
 
 var expect = chai.expect;
+
+/* globals describe:false, it:false, beforeEach:false */
 
 describe('stream-to-promise', function () {
 
@@ -20,26 +23,22 @@ describe('stream-to-promise', function () {
     promise = streamToPromise(stream);
   });
 
-  it('can resolve empty streams', function (done) {
-    promise
-      .then(function (buffer) {
-        expect(buffer).to.be.an.instanceOf(Buffer);
-        expect(buffer).to.have.length(0);
-       })
-      .done(done);
+  it('can resolve empty streams', function () {
     stream.emit('end');
+    return promise.then(function (buffer) {
+      expect(buffer).to.be.an.instanceOf(Buffer);
+      expect(buffer).to.have.length(0);
+    });
   });
 
-  it('resolves stream data', function (done) {
-    promise
-      .then(function (buffer) {
-        expect(buffer).to.be.an.instanceOf(Buffer);
-        expect(buffer.toString()).to.equal('foobar');
-      })
-      .done(done);
+  it('resolves stream data', function () {
     stream.emit('data', new Buffer('foo'));
     stream.emit('data', new Buffer('bar'));
     stream.emit('end');
+    return promise.then(function (buffer) {
+      expect(buffer).to.be.an.instanceOf(Buffer);
+      expect(buffer.toString()).to.equal('foobar');
+    });
   });
 
   it('resolves immediately for ended streams', function () {
@@ -49,14 +48,10 @@ describe('stream-to-promise', function () {
     });
   });
 
-
-  it('rejects on stream errors', function (done) {
+  it('rejects on stream errors', function () {
     var err = new Error();
     stream.emit('error', err);
-    promise.catch(function (error) {
-      expect(error).to.equal(err);
-      done();
-    });
+    return expect(promise).to.be.rejectedWith(err);
   });
 
 });
