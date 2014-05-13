@@ -3,6 +3,7 @@
 var Stream          = require('stream');
 var chai            = require('chai');
 var Promise         = require('bluebird');
+var DelayedStream   = require('delayed-stream');
 var streamToPromise = require('./');
 
 chai.use(require('chai-as-promised'));
@@ -54,6 +55,15 @@ describe('stream-to-promise', function () {
     stream.readable = false;
     return streamToPromise(stream).then(function (buffer) {
       expect(buffer).to.have.length(0);
+    });
+  });
+
+  it('ensures that streams are flowing (#1)', function () {
+    var delayed = DelayedStream.create(stream);
+    stream.emit('data', new Buffer('foo'));
+    stream.emit('end');
+    return streamToPromise(delayed).then(function (buffer) {
+      expect(buffer.toString()).to.equal('foo');
     });
   });
 
