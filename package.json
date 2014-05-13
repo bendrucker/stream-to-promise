@@ -1,6 +1,6 @@
 {
   "name": "stream-to-promise",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Convert readable streams to promises",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/valet-io/stream-to-promise.git"
+    "url": "git://github.com/bendrucker/stream-to-promise.git"
   },
   "keywords": [
     "stream",
@@ -17,9 +17,9 @@
   "author": "Ben Drucker <bvdrucker@gmail.com> (http://www.bendrucker.me)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/valet-io/stream-to-promise/issues"
+    "url": "https://github.com/bendrucker/stream-to-promise/issues"
   },
-  "homepage": "https://github.com/valet-io/stream-to-promise",
+  "homepage": "https://github.com/bendrucker/stream-to-promise",
   "dependencies": {
     "bluebird": "~1.1.0",
     "stream-to-array": "~1.0.0"
@@ -27,7 +27,6 @@
   "devDependencies": {
     "chai-as-promised": "~4.1.1",
     "chai": "~1.9.0",
-    "mocha": "~1.18.0",
-    "mocha-as-promised": "~2.0.0"
+    "mocha": "~1.18.2"
   }
 }
