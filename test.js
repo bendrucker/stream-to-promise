@@ -41,6 +41,15 @@ describe('stream-to-promise', function () {
     });
   });
 
+  it('can handle streams of buffers and strings', function () {
+    stream.emit('data', new Buffer('foo'));
+    stream.emit('data', 'bar');
+    stream.emit('end');
+    return promise.then(function (buffer) {
+      expect(buffer.toString()).to.equal('foobar');
+    });
+  });
+
   it('resolves immediately for ended streams', function () {
     stream.readable = false;
     return streamToPromise(stream).then(function (buffer) {
