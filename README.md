@@ -1,17 +1,25 @@
 stream-to-promise [![Build Status](https://travis-ci.org/bendrucker/stream-to-promise.png)](https://travis-ci.org/bendrucker/stream-to-promise) [![NPM version](https://badge.fury.io/js/stream-to-promise.png)](http://badge.fury.io/js/stream-to-promise)
 =================
 
-Convert readable streams to promises.
+Convert streams (readable or writable) to promises
 
 
 ```js
-streamToPromise(stream).then(function (buffer) {
+streamToPromise(readableStream).then(function (buffer) {
   // buffer.length === 3
 });
-stream.emit('data', new Buffer());
-stream.emit('data', new Buffer());
-stream.emit('data', new Buffer());
-stream.emit('end'); // promise is resolved here
+readableStream.emit('data', new Buffer());
+readableStream.emit('data', new Buffer());
+readableStream.emit('data', new Buffer());
+readableStream.emit('end'); // promise is resolved here
+```
+
+```js
+streamToPromise(writableStream).then(function () {
+  // resolves undefined
+});
+writableStream.write('data');
+writeableStream.end(); // promise is resolved here
 ```
 
 ```js
