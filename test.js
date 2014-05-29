@@ -17,60 +17,86 @@ var expect = chai.expect;
 
 describe('stream-to-promise', function () {
 
-  var stream, promise;
-  beforeEach(function () {
-    stream = new Stream.Readable();
-    stream._read = function noop () {};
-    promise = streamToPromise(stream);
-  });
+  describe('Readable streams', function () {
 
-  it('can resolve empty streams', function () {
-    stream.emit('end');
-    return promise.then(function (buffer) {
-      expect(buffer).to.be.an.instanceOf(Buffer);
-      expect(buffer).to.have.length(0);
+    var readable, promise;
+    beforeEach(function () {
+      readable = new Stream.Readable();
+      readable._read = function noop () {};
+      promise = streamToPromise(readable);
     });
-  });
 
-  it('resolves stream data', function () {
-    stream.emit('data', new Buffer('foo'));
-    stream.emit('data', new Buffer('bar'));
-    stream.emit('end');
-    return promise.then(function (buffer) {
-      expect(buffer).to.be.an.instanceOf(Buffer);
-      expect(buffer.toString()).to.equal('foobar');
+    it('can resolve empty streams', function () {
+      readable.emit('end');
+      return promise.then(function (buffer) {
+        expect(buffer).to.be.an.instanceOf(Buffer);
+        expect(buffer).to.have.length(0);
+      });
     });
-  });
 
-  it('can handle streams of buffers and strings', function () {
-    stream.emit('data', new Buffer('foo'));
-    stream.emit('data', 'bar');
-    stream.emit('end');
-    return promise.then(function (buffer) {
-      expect(buffer.toString()).to.equal('foobar');
+    it('resolves stream data', function () {
+      readable.emit('data', new Buffer('foo'));
+      readable.emit('data', new Buffer('bar'));
+      readable.emit('end');
+      return promise.then(function (buffer) {
+        expect(buffer).to.be.an.instanceOf(Buffer);
+        expect(buffer.toString()).to.equal('foobar');
+      });
     });
-  });
 
-  it('resolves immediately for ended streams', function () {
-    stream.readable = false;
-    return streamToPromise(stream).then(function (buffer) {
-      expect(buffer).to.have.length(0);
+    it('can handle streams of buffers and strings', function () {
+      readable.emit('data', new Buffer('foo'));
+      readable.emit('data', 'bar');
+      readable.emit('end');
+      return promise.then(function (buffer) {
+        expect(buffer.toString()).to.equal('foobar');
+      });
     });
-  });
 
-  it('ensures that streams are flowing (#1)', function () {
-    var delayed = DelayedStream.create(stream);
-    stream.emit('data', new Buffer('foo'));
-    stream.emit('end');
-    return streamToPromise(delayed).then(function (buffer) {
-      expect(buffer.toString()).to.equal('foo');
+    it('resolves immediately for ended streams', function () {
+      readable.readable = false;
+      return streamToPromise(readable).then(function (result) {
+        expect(result).to.be.undefined;
+      });
     });
+
+    it('ensures that streams are flowing (#1)', function () {
+      var delayed = DelayedStream.create(readable);
+      readable.emit('data', new Buffer('foo'));
+      readable.emit('end');
+      return streamToPromise(delayed).then(function (buffer) {
+        expect(buffer.toString()).to.equal('foo');
+      });
+    });
+
+    it('rejects on stream errors', function () {
+      var err = new Error();
+      readable.emit('error', err);
+      return expect(promise).to.be.rejectedWith(err);
+    });
+
   });
 
-  it('rejects on stream errors', function () {
-    var err = new Error();
-    stream.emit('error', err);
-    return expect(promise).to.be.rejectedWith(err);
+  describe('Writable streams (#2)', function () {
+
+    var writable, promise;
+    beforeEach(function () {
+      writable = new Stream.Writable();
+      writable._read = function noop () {};
+      promise = streamToPromise(writable);
+    });
+
+    it('resolves undefined when the stream finishes', function () {
+      writable.emit('finish');
+      return expect(promise).to.eventually.be.undefined;
+    });
+
+    it('rejects on stream errors', function () {
+      var err = new Error();
+      writable.emit('error', err);
+      return expect(promise).to.be.rejectedWith(err);
+    });
+
   });
 
 });
