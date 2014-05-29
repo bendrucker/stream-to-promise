@@ -4,6 +4,7 @@ var Stream          = require('stream');
 var chai            = require('chai');
 var Promise         = require('bluebird');
 var DelayedStream   = require('delayed-stream');
+var fs              = require('fs');
 var streamToPromise = require('./');
 
 chai.use(require('chai-as-promised'));
@@ -95,6 +96,35 @@ describe('stream-to-promise', function () {
       var err = new Error();
       writable.emit('error', err);
       return expect(promise).to.be.rejectedWith(err);
+    });
+
+  });
+
+  describe('Integration', function () {
+
+    it('can handle an fs read stream', function () {
+      return Promise.promisify(fs.writeFile, fs)('read.txt', 'hi there!')
+        .then(function () {
+          return streamToPromise(fs.createReadStream('read.txt'));
+        })
+        .then(function (contents) {
+          expect(contents.toString()).to.equal('hi there!');
+        });
+    });
+
+    it('can handle an fs write stream', function () {
+      var stream = fs.createWriteStream('written.txt');
+      process.nextTick(function () {
+        stream.write('written contents');
+        stream.end();
+      });
+      return streamToPromise(stream)
+        .then(function () {
+          return Promise.promisify(fs.readFile, fs)('written.txt');
+        })
+        .then(function (contents) {
+          expect(contents.toString()).to.equal('written contents');
+        });
     });
 
   });
