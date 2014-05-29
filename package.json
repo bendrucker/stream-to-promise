@@ -1,6 +1,6 @@
 {
   "name": "stream-to-promise",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Convert readable streams to promises",
   "main": "index.js",
   "scripts": {
