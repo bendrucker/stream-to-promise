@@ -8,5 +8,6 @@ deploy:
   api_key:
     secure: MJxTzyOdScVg/Agp5PAOCQQPkQDJa47EDHsyv0/hwU4OcRvYKc3iBdPHx7QXlqOnX1Z2lgALU9XHlVnR7huv/7OTC/tpGMdn/50r9I/AG+aaam29WxIA2Bbt2AHtA2sk+/KjMP/2A0J7v5g27MSL906Wr+x+TJKszOl7GYA5yvA=
   on:
+    all_branches: true
     tags: true
     repo: bendrucker/stream-to-promise
