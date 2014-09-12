@@ -6,13 +6,19 @@ var internals = {};
 
 internals.readable = function (stream) {
   var promise = toArray(stream);
+
   // Ensure stream is in flowing mode
   stream.resume();
+
   return promise
-    .map(function (part) {
-      return (part instanceof Buffer) ? part : new Buffer(part);
-    })
-    .then(Buffer.concat);
+    .then(function (parts) {
+      var buffers = [];
+      for (var i = 0, l = parts.length; i < l ; ++i) {
+        var part = parts[i];
+        buffers.push((part instanceof Buffer) ? part : new Buffer(part));
+      }
+      return Buffer.concat(buffers);
+    });
 };
 
 internals.writable = function (stream) {
@@ -25,7 +31,7 @@ internals.writable = function (stream) {
 module.exports = function (stream) {
   var promise;
   if (stream.readable) {
-    promise = internals.readable(stream);   
+    promise = internals.readable(stream);
   }
   else if (stream.writable) {
     promise = internals.writable(stream);
