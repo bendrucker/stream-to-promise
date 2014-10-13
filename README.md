@@ -1,4 +1,4 @@
-stream-to-promise [![Build Status](https://travis-ci.org/bendrucker/stream-to-promise.png)](https://travis-ci.org/bendrucker/stream-to-promise) [![NPM version](https://badge.fury.io/js/stream-to-promise.png)](http://badge.fury.io/js/stream-to-promise)
+stream-to-promise [![Build Status](https://travis-ci.org/bendrucker/stream-to-promise.svg)](https://travis-ci.org/bendrucker/stream-to-promise) [![NPM version](https://badge.fury.io/js/stream-to-promise.svg)](http://badge.fury.io/js/stream-to-promise)
 =================
 
 Convert streams (readable or writable) to promises
