@@ -1,7 +1,7 @@
 {
   "name": "stream-to-promise",
   "version": "1.0.2",
-  "description": "Convert readable streams to promises",
+  "description": "Convert streams (readable or writable) to promises",
   "main": "index.js",
   "scripts": {
     "test": "mocha test"
