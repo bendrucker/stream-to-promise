@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/bendrucker/stream-to-promise",
   "dependencies": {
-    "stream-to-array": "2",
-    "bluebird": "2"
+    "bluebird": "~3.0.6",
+    "stream-to-array": "~2.2.0"
   },
   "devDependencies": {
     "chai": "^3.4.1",
