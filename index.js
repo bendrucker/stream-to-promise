@@ -2,9 +2,22 @@
 
 var toArray = require('stream-to-array')
 var Promise = require('bluebird')
-var internals = {}
 
-internals.readable = function (stream) {
+module.exports = streamToPromise
+
+function streamToPromise (stream) {
+  var promise
+  if (stream.readable) {
+    promise = fromReadable(stream)
+  } else if (stream.writable) {
+    promise = fromWritable(stream)
+  } else {
+    promise = Promise.resolve()
+  }
+  return promise
+}
+
+function fromReadable (stream) {
   var promise = toArray(stream)
 
   // Ensure stream is in flowing mode
@@ -21,21 +34,9 @@ internals.readable = function (stream) {
     })
 }
 
-internals.writable = function (stream) {
+function fromWritable (stream) {
   return new Promise(function (resolve, reject) {
     stream.once('finish', resolve)
     stream.once('error', reject)
   })
-}
-
-module.exports = function (stream) {
-  var promise
-  if (stream.readable) {
-    promise = internals.readable(stream)
-  } else if (stream.writable) {
-    promise = internals.writable(stream)
-  } else {
-    promise = Promise.resolve()
-  }
-  return promise
 }
