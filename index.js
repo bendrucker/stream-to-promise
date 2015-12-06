@@ -24,13 +24,8 @@ function fromReadable (stream) {
   stream.resume()
 
   return promise
-    .then(function (parts) {
-      var buffers = []
-      for (var i = 0, l = parts.length; i < l; ++i) {
-        var part = parts[i]
-        buffers.push((part instanceof Buffer) ? part : new Buffer(part))
-      }
-      return Buffer.concat(buffers)
+    .then(function concat (parts) {
+      return Buffer.concat(parts.map(bufferize))
     })
 }
 
@@ -39,4 +34,8 @@ function fromWritable (stream) {
     stream.once('finish', resolve)
     stream.once('error', reject)
   })
+}
+
+function bufferize (chunk) {
+  return Buffer.isBuffer(chunk) ? chunk : new Buffer(chunk)
 }
