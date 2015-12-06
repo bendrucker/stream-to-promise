@@ -6,7 +6,7 @@ var Promise         = require('bluebird');
 var DelayedStream   = require('delayed-stream');
 var fs              = Promise.promisifyAll(require('fs'));
 var rimraf          = Promise.promisify(require('rimraf'));
-var streamToPromise = require('../');
+var streamToPromise = require('./');
 
 chai.use(require('chai-as-promised'));
 Promise.onPossiblyUnhandledRejection(function (err) {

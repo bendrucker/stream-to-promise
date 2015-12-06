@@ -4,7 +4,7 @@
   "description": "Convert streams (readable or writable) to promises",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test.js"
   },
   "repository": {
     "type": "git",
