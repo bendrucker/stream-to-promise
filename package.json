@@ -4,7 +4,7 @@
   "description": "Convert streams (readable or writable) to promises",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test.js"
+    "test": "standard && mocha test.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,8 @@
     "chai-as-promised": "4",
     "delayed-stream": "0.0.5",
     "mocha": "1",
-    "rimraf": "2"
+    "rimraf": "2",
+    "standard": "^5.4.1"
   },
   "files": [
     "index.js"
