@@ -31,5 +31,5 @@ function fromWritable (stream) {
 }
 
 function bufferize (chunk) {
-  return Buffer.isBuffer(chunk) ? chunk : new Buffer(chunk.toString())
+  return Buffer.isBuffer(chunk) ? chunk : new Buffer([chunk])
 }
