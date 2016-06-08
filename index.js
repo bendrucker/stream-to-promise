@@ -15,7 +15,7 @@ function fromReadable (stream) {
   var promise = toArray(stream)
 
   // Ensure stream is in flowing mode
-  stream.resume()
+  if (stream.resume) stream.resume()
 
   return promise
     .then(function concat (parts) {
