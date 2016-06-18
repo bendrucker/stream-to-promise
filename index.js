@@ -19,6 +19,9 @@ function fromReadable (stream) {
 
   return promise
     .then(function concat (parts) {
+      if (stream._readableState && stream._readableState.objectMode) {
+        return parts
+      }
       return Buffer.concat(parts.map(bufferize))
     })
 }

@@ -69,6 +69,18 @@ describe('stream-to-promise', function () {
       })
     })
 
+    it('returns an array for object streams', function () {
+      var objectStream = new Stream.Readable({objectMode: true})
+      objectStream._read = function noop () {}
+      var promise = streamToPromise(objectStream)
+      objectStream.emit('data', {foo: 'bar'})
+      objectStream.emit('data', {baz: 'qux'})
+      objectStream.emit('end')
+      return promise.then(function (results) {
+        expect(results).to.deep.equal([{foo: 'bar'}, {baz: 'qux'}])
+      })
+    })
+
     it('rejects on stream errors', function () {
       var err = new Error()
       readable.emit('error', err)
