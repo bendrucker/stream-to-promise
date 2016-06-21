@@ -1,7 +1,7 @@
 'use strict'
 
 var toArray = require('stream-to-array')
-var Promise = require('bluebird')
+var Promise = require('any-promise')
 
 module.exports = streamToPromise
 
