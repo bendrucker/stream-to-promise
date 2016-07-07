@@ -30,7 +30,7 @@ streamToPromise(writableStream).then(function () {
   // resolves undefined
 })
 writableStream.write('data')
-writeableStream.end() // promise is resolved here
+writableStream.end() // promise is resolved here
 ```
 
 ### Error Handling
