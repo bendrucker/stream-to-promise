@@ -2,6 +2,7 @@
 
 var toArray = require('stream-to-array')
 var Promise = require('any-promise')
+var onEnd = require('end-of-stream')
 
 module.exports = streamToPromise
 
@@ -28,8 +29,9 @@ function fromReadable (stream) {
 
 function fromWritable (stream) {
   return new Promise(function (resolve, reject) {
-    stream.once('finish', resolve)
-    stream.once('error', reject)
+    onEnd(stream, function (err) {
+      (err ? reject : resolve)(err)
+    })
   })
 }
 
