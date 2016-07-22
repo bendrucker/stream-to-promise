@@ -6,6 +6,7 @@ var Promise = require('bluebird')
 var DelayedStream = require('delayed-stream')
 var fs = Promise.promisifyAll(require('fs'))
 var rimraf = Promise.promisify(require('rimraf'))
+var path = require('path')
 var streamToPromise = require('./')
 
 chai.use(require('chai-as-promised'))
@@ -111,14 +112,14 @@ describe('stream-to-promise', function () {
   describe('Integration', function () {
     var tmp
     before(function () {
-      tmp = __dirname + '/tmp'
+      tmp = path.resolve(__dirname, 'tmp')
       return fs.mkdirAsync(tmp)
     })
 
     it('can handle an fs read stream', function () {
-      return fs.writeFileAsync(tmp + '/read.txt', 'hi there!')
+      return fs.writeFileAsync(path.resolve(tmp, 'read.txt'), 'hi there!')
         .then(function () {
-          return streamToPromise(fs.createReadStream(tmp + '/read.txt'))
+          return streamToPromise(fs.createReadStream(path.resolve(tmp, 'read.txt')))
         })
         .then(function (contents) {
           expect(contents.toString()).to.equal('hi there!')
@@ -126,14 +127,14 @@ describe('stream-to-promise', function () {
     })
 
     it('can handle an fs write stream', function () {
-      var stream = fs.createWriteStream(tmp + '/written.txt')
+      var stream = fs.createWriteStream(path.resolve(tmp, 'written.txt'))
       process.nextTick(function () {
         stream.write('written contents')
         stream.end()
       })
       return streamToPromise(stream)
         .then(function () {
-          return fs.readFileAsync(tmp + '/written.txt')
+          return fs.readFileAsync(path.resolve(tmp, 'written.txt'))
         })
         .then(function (contents) {
           expect(contents.toString()).to.equal('written contents')
