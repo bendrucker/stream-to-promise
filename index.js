@@ -36,5 +36,6 @@ function fromWritable (stream) {
 }
 
 function bufferize (chunk) {
-  return Buffer.isBuffer(chunk) ? chunk : new Buffer(chunk)
+  var newBuffer = typeof chunk === 'object' ? new Buffer([chunk]) : new Buffer(chunk)
+  return Buffer.isBuffer(chunk) ? chunk : newBuffer
 }
