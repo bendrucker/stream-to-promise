@@ -14,6 +14,7 @@ $ npm install --save[-dev] stream-to-promise
 ### Readable Streams
 
 ```js
+const streamToPromise = require('stream-to-promise');
 streamToPromise(readableStream).then(function (buffer) {
   // buffer.length === 3
 })
@@ -26,6 +27,7 @@ readableStream.emit('end') // promise is resolved here
 ### Writable Streams
 
 ```js
+const streamToPromise = require('stream-to-promise');
 streamToPromise(writableStream).then(function () {
   // resolves undefined
 })
@@ -36,6 +38,7 @@ writableStream.end() // promise is resolved here
 ### Error Handling
 
 ```js
+const streamToPromise = require('stream-to-promise');
 var err = new Error()
 streamToPromise(stream).catch(function (error) {
   // error === err
