@@ -6,7 +6,8 @@ stream-to-promise [![Build Status](https://travis-ci.org/bendrucker/stream-to-pr
 ## Installing
 
 ```sh
-$ npm install --save[-dev] stream-to-promise
+$ npm install --save stream-to-promise
+$ npm install --save-dev stream-to-promise
 ```
 
 ## Examples
