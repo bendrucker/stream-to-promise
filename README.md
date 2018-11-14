@@ -1,4 +1,4 @@
-stream-to-promise [![Build Status](https://travis-ci.org/bendrucker/stream-to-promise.svg)](https://travis-ci.org/bendrucker/stream-to-promise)
+stream-to-promise [![Build Status](https://travis-ci.org/bendrucker/stream-to-promise.svg)](https://travis-ci.org/bendrucker/stream-to-promise) [![Greenkeeper badge](https://badges.greenkeeper.io/bendrucker/stream-to-promise.svg)](https://greenkeeper.io/)
 =================
 
 > Convert streams (readable or writable) to promises
