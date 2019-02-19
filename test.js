@@ -2,17 +2,15 @@
 
 var Stream = require('stream')
 var chai = require('chai')
-var Promise = require('bluebird')
 var DelayedStream = require('delayed-stream')
-var fs = Promise.promisifyAll(require('fs'))
-var rimraf = Promise.promisify(require('rimraf'))
+var pify = require('pify')
+var fs = pify(require('fs'))
+var rimraf = pify(require('rimraf'))
 var path = require('path')
 var streamToPromise = require('./')
 
+require('hard-rejection/register')
 chai.use(require('chai-as-promised'))
-Promise.onPossiblyUnhandledRejection(function (err) {
-  throw err
-})
 
 var expect = chai.expect
 
@@ -36,8 +34,8 @@ describe('stream-to-promise', function () {
     })
 
     it('resolves stream data', function () {
-      readable.emit('data', new Buffer('foo'))
-      readable.emit('data', new Buffer('bar'))
+      readable.emit('data', Buffer.from('foo'))
+      readable.emit('data', Buffer.from('bar'))
       readable.emit('end')
       return promise.then(function (buffer) {
         expect(buffer).to.be.an.instanceOf(Buffer)
@@ -46,7 +44,7 @@ describe('stream-to-promise', function () {
     })
 
     it('can handle streams of buffers and strings', function () {
-      readable.emit('data', new Buffer('foo'))
+      readable.emit('data', Buffer.from('foo'))
       readable.emit('data', 'bar')
       readable.emit('end')
       return promise.then(function (buffer) {
@@ -57,13 +55,13 @@ describe('stream-to-promise', function () {
     it('resolves immediately for ended streams', function () {
       readable.readable = false
       return streamToPromise(readable).then(function (result) {
-        expect(result).to.be.undefined
+        expect(result).to.equal(undefined)
       })
     })
 
     it('ensures that streams are flowing (#1)', function () {
       var delayed = DelayedStream.create(readable)
-      readable.emit('data', new Buffer('foo'))
+      readable.emit('data', Buffer.from('foo'))
       readable.emit('end')
       return streamToPromise(delayed).then(function (buffer) {
         expect(buffer.toString()).to.equal('foo')
@@ -71,14 +69,14 @@ describe('stream-to-promise', function () {
     })
 
     it('returns an array for object streams', function () {
-      var objectStream = new Stream.Readable({objectMode: true})
+      var objectStream = new Stream.Readable({ objectMode: true })
       objectStream._read = function noop () {}
       var promise = streamToPromise(objectStream)
-      objectStream.emit('data', {foo: 'bar'})
-      objectStream.emit('data', {baz: 'qux'})
+      objectStream.emit('data', { foo: 'bar' })
+      objectStream.emit('data', { baz: 'qux' })
       objectStream.emit('end')
       return promise.then(function (results) {
-        expect(results).to.deep.equal([{foo: 'bar'}, {baz: 'qux'}])
+        expect(results).to.deep.equal([{ foo: 'bar' }, { baz: 'qux' }])
       })
     })
 
@@ -113,11 +111,11 @@ describe('stream-to-promise', function () {
     var tmp
     before(function () {
       tmp = path.resolve(__dirname, 'tmp')
-      return fs.mkdirAsync(tmp)
+      return fs.mkdir(tmp)
     })
 
     it('can handle an fs read stream', function () {
-      return fs.writeFileAsync(path.resolve(tmp, 'read.txt'), 'hi there!')
+      return fs.writeFile(path.resolve(tmp, 'read.txt'), 'hi there!')
         .then(function () {
           return streamToPromise(fs.createReadStream(path.resolve(tmp, 'read.txt')))
         })
@@ -134,7 +132,7 @@ describe('stream-to-promise', function () {
       })
       return streamToPromise(stream)
         .then(function () {
-          return fs.readFileAsync(path.resolve(tmp, 'written.txt'))
+          return fs.readFile(path.resolve(tmp, 'written.txt'))
         })
         .then(function (contents) {
           expect(contents.toString()).to.equal('written contents')
