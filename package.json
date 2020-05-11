@@ -33,7 +33,7 @@
     "mocha": "^6.0.0",
     "pify": "^4.0.1",
     "rimraf": "^3.0.0",
-    "standard": "^14.0.0"
+    "standard": "^14.3.4"
   },
   "files": [
     "index.js"
