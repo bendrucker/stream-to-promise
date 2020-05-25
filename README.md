@@ -36,7 +36,7 @@ writableStream.end() // promise is resolved here
 ### Error Handling
 
 ```js
-var err = new Error()
+const err = new Error()
 streamToPromise(stream).catch(function (error) {
   // error === err
 })

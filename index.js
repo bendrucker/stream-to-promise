@@ -1,33 +1,32 @@
 'use strict'
 
-var toArray = require('stream-to-array')
-var Promise = require('any-promise')
-var onEnd = require('end-of-stream')
+const toArray = require('stream-to-array')
+const Promise = require('any-promise')
+const onEnd = require('end-of-stream')
 
 module.exports = streamToPromise
 
-function streamToPromise (stream) {
+async function streamToPromise (stream) {
   if (stream.readable) return fromReadable(stream)
   if (stream.writable) return fromWritable(stream)
-  return Promise.resolve()
 }
 
-function fromReadable (stream) {
-  var promise = toArray(stream)
+async function fromReadable (stream) {
+  const promise = toArray(stream)
 
   // Ensure stream is in flowing mode
   if (stream.resume) stream.resume()
 
-  return promise
-    .then(function concat (parts) {
-      if (stream._readableState && stream._readableState.objectMode) {
-        return parts
-      }
-      return Buffer.concat(parts.map(bufferize))
-    })
+  const parts = await promise
+
+  if (stream._readableState && stream._readableState.objectMode) {
+    return parts
+  }
+
+  return Buffer.concat(parts.map(bufferize))
 }
 
-function fromWritable (stream) {
+async function fromWritable (stream) {
   return new Promise(function (resolve, reject) {
     onEnd(stream, function (err) {
       (err ? reject : resolve)(err)
