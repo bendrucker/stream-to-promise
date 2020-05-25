@@ -1,4 +1,4 @@
-stream-to-promise [![Build Status](https://travis-ci.com/bendrucker/stream-to-promise.svg?branch=master)](https://travis-ci.com/bendrucker/stream-to-promise)
+# stream-to-promise [![Build Status](https://travis-ci.com/bendrucker/stream-to-promise.svg?branch=master)](https://travis-ci.com/bendrucker/stream-to-promise)
 
 > Convert streams (readable or writable) to promises
 
