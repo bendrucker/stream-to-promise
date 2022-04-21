@@ -30,7 +30,7 @@
     "chai-as-promised": "^7.1.1",
     "delayed-stream": "^1.0.0",
     "hard-rejection": "^2.0.0",
-    "standard": "^16.0.0",
+    "standard": "^17.0.0",
     "tape": "^5.0.1",
     "tape-promise": "^4.0.0",
     "tmp-promise": "^3.0.2"
