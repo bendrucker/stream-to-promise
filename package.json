@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
+    "chai-as-promised": "^8.0.0",
     "delayed-stream": "^1.0.0",
     "hard-rejection": "^2.0.0",
     "standard": "^17.0.0",
